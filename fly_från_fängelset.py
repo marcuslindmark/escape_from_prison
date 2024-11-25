@@ -1,7 +1,8 @@
 # ***** IMPORT AV EXTERNA MODULER TILL SPELET *****
 # msvcrt behövs till pausfunktionen 
 # os behövs för att kunna rensa skäremen
-import msvcrt, os
+# random behövs för att lägga in slump i spelet
+import msvcrt, os, random
 
 
 # ***** VARIABLER I SPELET *****
@@ -14,6 +15,9 @@ tagit_nyckeln = False               # Kontrollerar om nyckeln finns i rummet
 # RUM 3
 tagit_barnteckningen = False        # Kontrollerar om barnteckningen finns i rummet
 gåtan_löst = False                  # Kontrollerar om spelaren skrivit rätt svar i datorterminalen            
+
+# HUVUDMENYN
+gör_menyval = True
 
 # ***** DICTIONARIES I SPELET *****
 # Här är alla dictionaries (uppslagsverk) som används i spelet.
@@ -141,7 +145,7 @@ def rum_2(aktuellt_rum):
         if varit_i_rummet["rum_2"]:
             print("Återigen är du i det mörka och fuktiga rummet med märkena på väggarna.")
         else:
-            print(f"Du kommer in i en mörkt och fuktigt korridor med märken på väggarna.")
+            print(f"Du kommer in i en mörk och fuktig korridor med märken på väggarna.")
             
         # Markera att spelaren har varit i rummet
         varit_i_rummet["rum_2"] = True
@@ -171,6 +175,15 @@ def rum_2(aktuellt_rum):
             
             # Anropar pausfunktionen
             tryck_på_valfri_tangent()
+        
+            # Avslutar while-loopen
+            spelaren_väljer = False 
+                
+            # Sätter aktuellet rum till rummet som spelaren går in i
+            aktuellt_rum = "rum_4"
+                
+            # Returnerar det nya värdet för aktuellt_rum till spelloopen
+            return aktuellt_rum
         elif (spelarens_val == "3"):
         
             # Sätter aktuellt rum till det rum som spelaren vill gå till
@@ -179,8 +192,9 @@ def rum_2(aktuellt_rum):
             # Skickar tillbaka aktuellt rum till spelloopen.
             return aktuellt_rum  
         elif (spelarens_val == "4"):
-            print ("\nMärkena påminner dig om en streckgubbe som håller i något fyrkantigt.")
-    
+            print ("\nNär du tittar närmare på märkena påminner den ena") 
+            print("om en streckgubbe som håller i något fyrkantigt och pekar till höger.")
+            print("Det vänstra ser ut som en indian som är på jakt efter något.")
             # Anropar pausfunktionen
             tryck_på_valfri_tangent()
         elif (spelarens_val == "5"):
@@ -193,7 +207,6 @@ def rum_2(aktuellt_rum):
             
             # Anropar pausfunktionen
             tryck_på_valfri_tangent()   
-
 
 
 ### RUM 3 ###
@@ -292,28 +305,189 @@ def rum_3(aktuellt_rum, tagit_barnteckningen, gåtan_löst):
 
 ### RUM 4 ###
 # Funktion som hanterar allt som händer i rum 4
-def rum_4():
-    print("Du är i rum 4")
+def rum_4(aktuellt_rum):
+    spelaren_väljer = True
+    
+    while (spelaren_väljer):
+         # Rensar skärmen innan beskrivningen av rummet skrivs ut på nytt.
+        rensa_skärmen()
+        
+        # Beskrivningen av rummet ändras om spelaren har varit där tidigare
+        if varit_i_rummet["rum_4"]:
+            print("Du är tillbaka i det prickiga rummet.") 
+            print("Den fjäderklädda vakten sover och snarkar.")
+            print("Det finns en ekdörr till höger och bakom dig ligger korridoren.")
+        else:
+            print("Du kommer in i ett prickigt rum med en ekdörr till höger.")
+            print("En vakt med en indianfjäder i håret sitter och halvsover")
+            print ("på en stol vid ett bord i mitten av rummet.")
+            print("Bakom dig har du dörren tillbaka till korridoren du kom ifrån.")
+        
+        # Markera att spelaren har varit i rummet
+        varit_i_rummet["rum_4"] = True
+        
+        print ("1. Gå bakåt till korridoren igen.")
+        print ("2. Smyg förbi vakten (30% risk att den vaknar) och gå höger.")
+        print ("3. Se vad du bär på.")
+        spelarens_val = input("Vad vill du göra? ")
+        if (spelarens_val == "1"):
+            print ("\nDu går tillbaka till korridoren.")
+            
+            # Anropar pausfunktionen
+            tryck_på_valfri_tangent()
 
+            # Sätter aktuellt rum till det rum som spelaren vill gå till
+            aktuellt_rum = "rum_2"
+            
+            # Skickar tillbaka aktuellt rum till spelloopen.
+            return aktuellt_rum
+        elif (spelarens_val == "2"):
+            print("Du försöker smyga förbi vakten och...")
+            slumptal = random.randint(1, 100)    
+            
+            if (slumptal <= 30):
+                print ("Vakten vaknar och med blixtens hastighet drar den fram en pilbåge") 
+                print ("och skjuter iväg en pil som naglar fast dina kläder mot väggen.")
+                print ("\"Jaså en rymmare, men nu har jag dig fast!\", skrattar vakten.")
+                print ("Vakten låser in dig i cellen igen och lämnar dig där.")
+                
+                # Anropar pausfunktionen
+                tryck_på_valfri_tangent()
+
+                # Sätter aktuellt rum till cellen
+                aktuellt_rum = "rum_1"
+            
+                # Skickar tillbaka aktuellt rum till spelloopen.
+                return aktuellt_rum
+            else:
+                print ("Vakten grymtar lite i sömnen, men vaknar inte.")
+                print ("Du öppnar försiktigt ekdörren och går in i rummet bakom...")
+                
+                # Anropar pausfunktionen
+                tryck_på_valfri_tangent()
+
+                # Sätter aktuellt rum till cellen
+                aktuellt_rum = "rum_5"
+            
+                # Skickar tillbaka aktuellt rum till spelloopen.
+                return aktuellt_rum
+        elif (spelarens_val == "3"):
+            if inventory:
+                print("\nDu tittar i dina gigantiska fickor och hittar följande:")
+                for föremål, beskrivning in inventory.items():
+                    print(f"- {föremål.capitalize()} ({beskrivning})")
+            else:
+                print("\nDu tittar i dina fickor, men de är tomma.")
+            
+            # Anropar pausfunktionen
+            tryck_på_valfri_tangent()    
+        
+            
 
 ### RUM 5 ###
 # Funktion som hanterar allt som händer i rum 5
-def rum_5():
-    print("Du är i rum 5")
-
-# Spelet fortsätter köras så länge som spelaren inte hittat ut ur fängelset
-while (spelet_körs):
-    # När spelaren är klar i rummet och går till nästa rum 
-    # uppdateras rumvariabeln till den nya platsen  
-  
-    if aktuellt_rum == "rum_1":
-        aktuellt_rum, tagit_nyckeln = rum_1(aktuellt_rum, tagit_nyckeln)
-    elif aktuellt_rum == "rum_2":
-        aktuellt_rum = rum_2(aktuellt_rum)
-    elif aktuellt_rum == "rum_3":
-        aktuellt_rum, tagit_barnteckningen, gåtan_löst = rum_3(aktuellt_rum, tagit_barnteckningen, gåtan_löst)
-    else:
-        print("Spelet är slut.")
-        break
-
+def rum_5(aktuellt_rum):
+    spelaren_väljer = True
+    
+    while (spelaren_väljer):
+         # Rensar skärmen innan beskrivningen av rummet skrivs ut på nytt.
+        rensa_skärmen()
         
+        # Beskrivningen av rummet ändras om spelaren har varit där tidigare
+        if varit_i_rummet["rum_5"]:
+            print("Du är tillbaka i det randiga rummet med speglarna.") 
+            print("Det hänger en lapp på en anslagstavla.")
+            print("Bakåt finns rummet med vakten, framför dig ser du en väg ut.")
+        else:
+            print("Du kommer in i ett randigt rum fullt med speglar.")
+            print("Du ser dig själv i spegeln och konstaterar att du sett bättre dagar.")
+            print("Det finns en anslagstavla här med en lapp på.")
+            print("På andra sidan rummet ser du en utgång.")
+        
+        # Markera att spelaren har varit i rummet
+        varit_i_rummet["rum_5"] = True
+        
+        print ("1. Gå bakåt igen.")
+        print ("2. Titta på lappen.")
+        print ("3. Se vad du bär på.")
+        print ("4. Gå rakt fram genom utgången.")
+        spelarens_val = input("Vad vill du göra? ")
+        if (spelarens_val == "1"):
+            print ("\nDu går tillbaka till rummet innan.")
+            print ("Men det skulle du inte ha gjort! För direkt när du öppnar dörren")
+            print ("blir du haffad av en vakt med indianfjädrar i håret.")
+            print ("\"Kom med här!\", säger den och du förs bryskt tillbaka till din cell.")
+            # Anropar pausfunktionen
+            tryck_på_valfri_tangent()
+
+            # Sätter aktuellt rum till det rum som spelaren vill gå till
+            aktuellt_rum = "rum_1"
+            
+            # Skickar tillbaka aktuellt rum till spelloopen.
+            return aktuellt_rum
+        elif (spelarens_val == "2"):
+            print("Du går fram till anslagstavlan och läser lappen. Det står:")
+            print("\"Här skulle det egentligen Bosse Fighter vaktat men han tog semester.\"")
+    
+            # Anropar pausfunktionen
+            tryck_på_valfri_tangent() 
+        elif (spelarens_val == "3"):
+            if inventory:
+                print("\nDu tittar i dina inte oansenliga fickor och hittar följande:")
+                for föremål, beskrivning in inventory.items():
+                    print(f"- {föremål.capitalize()} ({beskrivning})")
+            else:
+                print("\nDu tittar i dina fickor, men de är tomma.")
+            
+            # Anropar pausfunktionen
+            tryck_på_valfri_tangent() 
+        elif (spelarens_val == "4"):
+            print ("\nDu går ut i friheten och känner den friska luften.")
+            print ("Grattis du hittade en väg ut och har lyckats fly från fängelset!")
+            
+            # Anropar pausfunktionen
+            tryck_på_valfri_tangent()
+
+            # Sätter aktuellt rum till det rum som spelaren vill gå till
+            aktuellt_rum = ""
+            
+            # Skickar tillbaka aktuellt rum till spelloopen.
+            return aktuellt_rum
+
+    
+### SPEL-LOOPEN ###
+# Spelet fortsätter köras så länge som spelaren inte hittat ut ur fängelset
+def spel_loop(aktuellt_rum, tagit_nyckeln, tagit_barnteckningen, gåtan_löst):
+    while (spelet_körs):
+        # När spelaren är klar i rummet och går till nästa rum 
+        # uppdateras rumvariabeln till den nya platsen  
+    
+
+        if aktuellt_rum == "rum_1":
+            aktuellt_rum, tagit_nyckeln = rum_1(aktuellt_rum, tagit_nyckeln)
+        elif aktuellt_rum == "rum_2":
+            aktuellt_rum = rum_2(aktuellt_rum)
+        elif aktuellt_rum == "rum_3":
+            aktuellt_rum, tagit_barnteckningen, gåtan_löst = rum_3(aktuellt_rum, tagit_barnteckningen, gåtan_löst)
+        elif aktuellt_rum == "rum_4":
+            aktuellt_rum = rum_4(aktuellt_rum)
+        elif aktuellt_rum == "rum_5":
+            aktuellt_rum = rum_5(aktuellt_rum)
+        else:
+            print("Spelet är slut.")
+            tryck_på_valfri_tangent()
+            break
+
+
+# Visar menyn
+while (gör_menyval):
+    rensa_skärmen()
+
+    print ("FLY FRÅN FÄNGELSET")
+    print ("1. Starta spelet")
+    print ("2. Avsluta")
+    meny_val = input ("Vad vill du göra: ")
+    if (meny_val == "1"):
+        spel_loop(aktuellt_rum, tagit_nyckeln, tagit_barnteckningen, gåtan_löst)
+    elif (meny_val == "2"):
+        break
