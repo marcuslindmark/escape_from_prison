@@ -486,8 +486,28 @@ while (gör_menyval):
     print ("FLY FRÅN FÄNGELSET")
     print ("1. Starta spelet")
     print ("2. Avsluta")
+    print ("3. Visa instruktioner")
     meny_val = input ("Vad vill du göra: ")
     if (meny_val == "1"):
         spel_loop(aktuellt_rum, tagit_nyckeln, tagit_barnteckningen, gåtan_löst)
     elif (meny_val == "2"):
         break
+    elif (meny_val == "3"):
+        print("\n")
+        # Filens namn
+        filnamn = "readme.txt"
+
+        try:
+            # Öppna filen i läsläge
+            with open(filnamn, "r", encoding="utf-8") as fil:
+                # Läs innehållet
+                innehåll = fil.read()
+                # Skriv ut innehållet i konsolen
+                print(innehåll)
+                tryck_på_valfri_tangent()
+        except FileNotFoundError:
+            print(f"Filen '{filnamn}' kunde inte hittas.")
+            tryck_på_valfri_tangent()
+        except Exception as e:
+            print(f"Ett fel inträffade: {e}")
+            tryck_på_valfri_tangent()
