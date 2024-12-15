@@ -1,6 +1,6 @@
 # ***** IMPORT AV EXTERNA MODULER TILL SPELET *****
 # msvcrt behövs till pausfunktionen 
-# os behövs för att kunna rensa skäremen
+# os behövs för att kunna rensa skärmen
 # random behövs för att lägga in slump i spelet
 import msvcrt, os, random
 
@@ -264,7 +264,7 @@ def rum_3(aktuellt_rum, tagit_barnteckningen, gåtan_löst):
             aktuellt_rum = "rum_2"
             
             # Skickar tillbaka aktuellt rum till spelloopen.
-            return aktuellt_rum, tagit_barnteckningen
+            return aktuellt_rum, tagit_barnteckningen, gåtan_löst
         elif (spelarens_val == "3"):
             if (tagit_barnteckningen == False): 
                 print("Du hittar en barnteckning på någon som badar.")
